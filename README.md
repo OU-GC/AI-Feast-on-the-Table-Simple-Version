@@ -28,7 +28,9 @@ ai-feast-on-the-table/
 └── LICENSE
 ```
 
-## Local Development
+## Development & Deployment
+
+### Local Development
 
 ```bash
 # 1. Install dependencies
@@ -44,7 +46,7 @@ python api/index.py
 
 Then open <http://localhost:5000> in your browser.
 
-## Deploying to Vercel
+### Deploying to Vercel
 
 1. Sign in to [vercel.com](https://vercel.com) with your GitHub account and import this repository
 2. Choose **Other** as the Framework Preset; no build command is needed

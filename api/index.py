@@ -18,7 +18,7 @@ if openai.api_key is None:
 
 # 餐廳菜單與營養成分資料
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-CSV_PATH = os.getenv('CSV_PATH', os.path.join(BASE_DIR, '..', 'data', 'restaurant_information_v3.csv'))
+CSV_PATH = os.getenv('CSV_PATH', os.path.join(BASE_DIR, '..', 'data', 'restaurant_information.csv'))
 df = pd.read_csv(CSV_PATH, encoding='utf-8-sig')
 df.replace('', pd.NA, inplace=True)
 df.fillna(0, inplace=True)

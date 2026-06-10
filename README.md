@@ -1,11 +1,11 @@
 # AI Feast on the Table (simple)
 
-An AI-powered personalized dining recommendation system built for the Asia University Generative AI Competition, combining real campus restaurant menus with OpenAI GPT.
+An AI-powered personalized dining recommendation system that combines real restaurant menus with OpenAI GPT.
 
 After the user enters their gender, age, height, weight, and weekly exercise days, the system:
 
 1. Calculates BMI, Basal Metabolic Rate (BMR), and Total Daily Energy Expenditure (TDEE)
-2. Filters the campus restaurant menu database by BMI range and randomly recommends 3 dishes
+2. Filters the restaurant menu database by BMI range and randomly recommends 3 dishes
 3. Calls GPT-3.5-turbo to generate a personalized nutrition analysis and dietary advice in the voice of a nutritionist
 
 ## Project Structure
@@ -19,7 +19,7 @@ ai-feast-on-the-table/
 │   ├── homepage.html       # Main app page
 │   └── images/             # Background images
 ├── data/
-│   └── restaurant_information_v3.csv   # Restaurant menus with nutrition facts
+│   └── restaurant_information.csv   # Restaurant menus with nutrition facts
 ├── docs/                   # Project proposal, architecture & flow diagrams
 ├── showcase/               # Demo results (kept local only, not in version control)
 ├── vercel.json             # Vercel routing config
@@ -73,12 +73,8 @@ The response includes the BMI, daily caloric need, recommended macronutrient int
 
 ## Data Source
 
-Menus and prices of 12 restaurants around Asia University were collected via the QuickClick LINE store API.
-Nutrition facts (calories, protein, fat, carbohydrates) were compiled manually and merged into `data/restaurant_information_v3.csv`.
-
-## History
-
-The original competition-era codebase had two instances (`localtest_instance` for local testing and `web_instance` for the campus server deployment) plus PHP/MySQL registration/login pages. These were removed during the restructuring in favor of a single Vercel-deployable version; the old code is still available in the git history (initial commit).
+Menus and prices of 12 restaurants were collected via the QuickClick LINE store API.
+Nutrition facts (calories, protein, fat, carbohydrates) were compiled manually and merged into `data/restaurant_information.csv`.
 
 ## License
 

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>餐桌上的AI盛宴</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            background-color: rgba(255, 255, 255, 0); /* 使用白色半透明的叠加颜色 */
+            background-blend-mode: lighten; /* 淡化效果 */
+            transition: background-image 1s ease-in-out; /* 添加过渡效果 */
+        }
+        .container {
+            padding: 20px;
+            width: 400px;
+            background-color: rgba(255, 255, 255, 1.0);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 15px; /* 添加圆角 */
+        }
+        .header {
+            margin-bottom: 20px;
+            width: 100%;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+        }
+        .input-section {
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        .input-section label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .input-section input, .input-section select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .menu-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 35px;
+            height: 35px;
+            background-color: #000;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .dropdown {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: 10px;
+            border: 1px solid #000;
+            background-color: #fff;
+            text-align: left;
+        }
+        .dropdown a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #000;
+        }
+        .dropdown a:hover {
+            background-color: #f1f1f1;
+        }
+        .api-output {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            width: 100%;
+            max-width: 500px;
+            max-height: 300px;
+            text-align: left;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+        }
+        @keyframes loadingDots {
+            0% { content: "loading"; }
+            33% { content: "loading."; }
+            66% { content: "loading.."; }
+            100% { content: "loading..."; }
+        }
+        .loading-text::after {
+            content: "loading";
+            animation: loadingDots 1.5s steps(3, end) infinite;
+        }
+        .loading {
+            display: none;
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #ff8000;
+        }
+        button {
+            background-color: #ff8000;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 12px; /* 添加圆角 */
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-button" onclick="toggleMenu()"></div>
+    <div class="dropdown" id="dropdownMenu">
+        <a href="index.html">回到首頁</a>
+    </div>
+    <div class="container">
+        <div class="header">
+            <h1>餐桌上的AI盛宴</h1>
+            <h1>亞洲大學AI餐食推薦系統</h1>
+            <h4>【人生難題不外乎愛情、事業以及今天吃什麼！】</h4>
+        </div>
+        <div class="input-section">
+            <label for="gender">性別:</label>
+            <select id="gender">
+                <option value="男性">男</option>
+                <option value="女性">女</option>
+            </select><br>
+
+            <label for="age">年齡:</label>
+            <input type="number" id="age"><br>
+
+            <label for="height">身高:</label>
+            <input type="number" id="height"><br>
+
+            <label for="weight">體重:</label>
+            <input type="number" id="weight"><br>
+
+            <label for="exercise-days">每週運動天數:</label>
+            <select id="exercise-days">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+            </select>
+        </div>
+        <button onclick="fetchApiData()">GPT分析</button>
+        <div class="loading" id="loading">
+            <span class="loading-text"></span>
+        </div>
+        <div class="api-output" id="apiOutput"></div>
+    </div>
+    <script>
+        async function fetchApiData() {
+            var gender = document.getElementById('gender').value;
+            var age = document.getElementById('age').value;
+            var height = document.getElementById('height').value;
+            var weight = document.getElementById('weight').value;
+            var exerciseDays = document.getElementById('exercise-days').value;
+            var apiOutput = document.getElementById('apiOutput');
+            var loading = document.getElementById('loading');
+            var button = document.querySelector('button');
+            // 清空之前的輸出
+            apiOutput.innerHTML = '';
+
+            // 檢查輸入值
+            if (!age || isNaN(age) || age <= 0 || age > 100) {
+                alert('請輸入有效的年齡');
+                return;
+            }
+            if (!height || isNaN(height) || height <= 0 || height > 230) {
+                alert('請輸入有效的身高');
+                return;
+            }
+            if (!weight || isNaN(weight) || weight <= 0 || weight > 200) {
+                alert('請輸入有效的體重');
+                return;
+            }
+
+            var data = {
+                gender: gender,
+                age: age,
+                height: height,
+                weight: weight,
+                exercise: exerciseDays
+            };
+
+            loading.style.display = 'block';
+            button.disabled = true;
+
+            try {
+                let response = await fetch('/api/recommend_food', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                let result = await response.json();
+                loading.style.display = 'none';
+                button.disabled = false;
+                if (response.ok && !result.error) {
+                    if (Array.isArray(result.recommendations)) {
+                        let recommendationsHtml = '<ul>';
+                        result.recommendations.forEach(rec => {
+                            recommendationsHtml += `<li>${rec.store} - ${rec.name}<br>熱量: ${rec.calories} 卡<br>蛋白質: ${rec.protein} g<br>脂肪: ${rec.fat} g<br>碳水化合物: ${rec.carbs} g</li>`;
+                        });
+                        recommendationsHtml += '</ul>';
+                        apiOutput.innerHTML = `
+                            <p><strong>您的身體:</strong></p>
+                            <ul>
+                                <li>BMI:${result.bmi.toFixed(2)}</li>
+                                <li>每日總消耗熱量（TDEE）:${result.daily_caloric_need.toFixed(2)} kcal</li>
+                            </ul>
+                            <p><strong>每日建議營養需求:</strong></p>
+                            <ul>
+                                <li>碳水化合物量: ${result.macronutrients.carbohydrates.toFixed(2)} g</li>
+                                <li>蛋白質量: ${result.macronutrients.protein.toFixed(2)} g</li>
+                                <li>脂肪量: ${result.macronutrients.fat.toFixed(2)} g</li>
+                            </ul>
+                            <p><strong>推薦食物:</strong></p>
+                            ${recommendationsHtml}
+                            <p><strong>總結:</strong></p>
+                            <p>${result.summary}</p>
+                        `;
+                    } else {
+                        apiOutput.innerHTML = `<p>No recommendations available.</p>`;
+                    }
+                } else {
+                    apiOutput.innerHTML = `<p>Error: ${result.error}</p>`;
+                }
+            } catch (error) {
+                loading.style.display = 'none';
+                button.disabled = false;
+                apiOutput.innerHTML = `<p>Error: ${error.message}</p>`;
+            }
+        }
+
+        function toggleMenu() {
+            var dropdownMenu = document.getElementById('dropdownMenu');
+            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+        }
+    </script>
+    <script>
+        // 背景圖片每 5 秒輪播
+        const images = [
+            'images/1.jpg',
+            'images/2.jpg',
+            'images/3.jpg',
+            'images/4.jpg',
+        ];
+
+        let currentIndex = 0;
+
+        function changeBackgroundImage() {
+            const nextIndex = (currentIndex + 1) % images.length;
+            const nextImage = new Image();
+            nextImage.src = images[nextIndex];
+            nextImage.onload = () => {
+                document.body.style.backgroundImage = `url(${nextImage.src})`;
+                currentIndex = nextIndex;
+            };
+            nextImage.onerror = () => {
+                console.error(`Failed to load image: ${images[nextIndex]}`);
+            };
+        }
+        document.body.style.backgroundImage = `url(${images[currentIndex]})`;
+        setInterval(changeBackgroundImage, 5000);
+    </script>
+</body>
+</html>

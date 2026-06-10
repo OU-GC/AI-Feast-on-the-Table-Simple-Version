@@ -1,0 +1,16 @@
+# 環境變數與金鑰(切勿上傳)
+.env
+*.pem
+
+# 成果展示(含大型影片,暫不上傳;欲上傳請移除此行)
+showcase/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS
+Thumbs.db
+.DS_Store

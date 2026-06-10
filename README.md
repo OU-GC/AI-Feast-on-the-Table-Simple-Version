@@ -1,4 +1,4 @@
-# AI Feast on the Table (simple)
+# AI Feast on the Table (simple version)
 
 An AI-powered personalized dining recommendation system that combines real restaurant menus with OpenAI GPT.
 

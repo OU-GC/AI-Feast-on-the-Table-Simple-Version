@@ -69,13 +69,9 @@ pip install -r requirements.txt
 python api/index.py
 ```
 
-Then open <http://localhost:5000> in your browser.
-
 ## Deployment
 
-Configured for Vercel — `vercel.json` rewrites every path to the `api/index.py`
-serverless function, which also serves the `public/` static pages. A public demo
-link is not provided for now due to cost considerations.
+Deployed on Vercel — try it at [ai-feast-on-the-table-simple-versio-chi.vercel.app](https://ai-feast-on-the-table-simple-versio-chi.vercel.app/).
 
 ## API
 

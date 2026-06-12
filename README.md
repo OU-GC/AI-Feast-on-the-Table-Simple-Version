@@ -1,4 +1,4 @@
-# AI Feast on the Table (Simple-Version)
+# AI Feast on the Table (Simple Version)
 
 
 Enter your gender, age, height, weight, and weekly exercise days, and the app
